@@ -97,3 +97,72 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+
+example in book app
+Book.entity = interface 
+export class Book {
+  id: number;
+  title: string;
+  author: string;
+
+}
+
+
+manggil si buku di book.service.ts dari mockup
+import { Injectable } from '@nestjs/common 
+import { mockBooks } from './mockup/mockBoo 
+import { Book } from './entity/book.entity'
+
+@Injectable()
+
+export class BooksService {
+  books = mockBooks;
+
+  findAll(): Book[] {
+    return this.books;
+  }
+}
+
+books.controller ambil data dari servie
+private = memastikan constructor cuma bisa pakai yang berlaku di bookservice
+readonly = biar ga bisa diubah
+
+
+WORK
+
+● TransactionsService - Business Logic (Simplified) › Successful Transaction Processing › should use helper methods for common operations
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      136 |       // Test deposit helper
+      137 |       const depositResult = await service.deposit('account1', 500, 'Salary');
+    > 138 |       expect(depositResult).toBeDefined();
+          |                             ^
+      139 |
+      140 |       // Test withdraw helper  
+      141 |       const withdrawResult = await service.withdraw('account1', 100, 'ATM');
+
+      at Object.<anonymous> (transaction/transaction.business.spec.ts:138:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 10 passed, 11 total
+Snapshots:   0 total
+Time:        2.056 s
+Ran all test suites matching /transaction.business.spec.ts/i.
+
+
+Why authcontroller test jalan:
+
+PASS  src/auth/auth.controller.spec.ts
+  AuthController - Endpoint Functionality
+    POST /auth/register - Register Endpoint
+      ✓ should successfully register a new user (21 ms)
+    POST /auth/login - Login Endpoint
+      ✓ should successfully login with valid credentials (2 ms)
+    GET /auth/profile - Profile Endpoint
+      ✓ should return user profile when authenticated (4 ms)
+
+      endpoint yg lain mana?

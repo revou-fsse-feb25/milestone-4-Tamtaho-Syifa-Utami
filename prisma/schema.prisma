@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  firstName String
+  lastName  String
+  password  String   
+  role      String   @default("USER") // "USER" or "ADMIN"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationship: One user can have multiple accounts
+  accounts Account[]
+
+  @@map("users")
+}
+
+model Account {
+  id            String   @id @default(cuid())
+  accountNumber String   @unique
+  accountType   String   // e.g., "CHECKING", "SAVINGS"
+  balance       Decimal  @default(0.00) @db.Decimal(10, 2)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Foreign key to User
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relationships: One account can have multiple transactions
+  sentTransactions     Transaction[] @relation("SenderAccount")
+  receivedTransactions Transaction[] @relation("ReceiverAccount")
+
+  @@map("accounts")
+}
+
+model Transaction {
+  id          String   @id @default(cuid())
+  amount      Decimal  @db.Decimal(10, 2)
+  type        String   // e.g., "DEPOSIT", "WITHDRAWAL", "TRANSFER"
+  description String?
+  status      String   @default("COMPLETED") // "PENDING", "COMPLETED", "FAILED"
+  createdAt   DateTime @default(now())
+
+  // Foreign keys
+  fromAccountId String?
+  toAccountId   String?
+
+  // Relationships
+  fromAccount Account? @relation("SenderAccount", fields: [fromAccountId], references: [id])
+  toAccount   Account? @relation("ReceiverAccount", fields: [toAccountId], references: [id])
+
+  @@map("transactions")
+}
