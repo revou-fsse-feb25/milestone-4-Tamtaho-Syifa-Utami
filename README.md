@@ -1,168 +1,109 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+<h1> Milestone 4 </h1>
+<h2> Relationships </h2>
+1. User ⇨ Account (One-to-Many)
+userId in the Account model is a foreign key that references User.id
+Cascade delete is enabled, so if a user is deleted, all their related accounts will also be deleted
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+2. Account ⇨ Transaction (One-to-Many in two directions)
+A transaction may have either or both fields:
+Transfer: has both sender and receiver
+Deposit: only has toAccount
+Withdrawal: only has fromAccount
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+<h2> seeder </h2>
 
-## Description
+Uses AI to generate data 
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+<h2> Backend API </h2>
 
-## Project setup
+Data formats:
+GET user
+<code>
+ {
+    "id": 1,
+    "email": "admin@bank.com",
+    "firstName": "System",
+    "lastName": "Administrator",
+    "role": "ADMIN"
+  },
 
-```bash
-$ npm install
-```
-
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
-
-
-example in book app
-Book.entity = interface 
-export class Book {
-  id: number;
-  title: string;
-  author: string;
-
-}
-
-
-manggil si buku di book.service.ts dari mockup
-import { Injectable } from '@nestjs/common 
-import { mockBooks } from './mockup/mockBoo 
-import { Book } from './entity/book.entity'
-
-@Injectable()
-
-export class BooksService {
-  books = mockBooks;
-
-  findAll(): Book[] {
-    return this.books;
+    {
+    "id": 5,
+    "email": "bob.wilson@example.com",
+    "firstName": "Bob",
+    "lastName": "Wilson",
+    "role": "USER"
   }
-}
-
-books.controller ambil data dari servie
-private = memastikan constructor cuma bisa pakai yang berlaku di bookservice
-readonly = biar ga bisa diubah
-
-
-WORK
-
-● TransactionsService - Business Logic (Simplified) › Successful Transaction Processing › should use helper methods for common operations
-
-    expect(received).toBeDefined()
-
-    Received: undefined
-
-      136 |       // Test deposit helper
-      137 |       const depositResult = await service.deposit('account1', 500, 'Salary');
-    > 138 |       expect(depositResult).toBeDefined();
-          |                             ^
-      139 |
-      140 |       // Test withdraw helper  
-      141 |       const withdrawResult = await service.withdraw('account1', 100, 'ATM');
-
-      at Object.<anonymous> (transaction/transaction.business.spec.ts:138:29)
-
-Test Suites: 1 failed, 1 total
-Tests:       1 failed, 10 passed, 11 total
-Snapshots:   0 total
-Time:        2.056 s
-Ran all test suites matching /transaction.business.spec.ts/i.
+  
+  GET accounts
+  {
+      accountNumber: 'ACC-002-SAV',
+      accountType: 'SAVINGS',
+      balance: 8750.25,
+      userId: user2.id,
+      }
 
 
-Why authcontroller test jalan:
+  GET transactions
+  {
+      type: 'DEPOSIT',
+      amount: 1000.00,
+      description: 'Initial deposit',
+      toAccountId: account1.id,
+      status: 'COMPLETED',
+    },
+{
+      type: 'WITHDRAWAL',
+      amount: 150.00,
+      description: 'Cash withdrawal',
+      fromAccountId: account3.id,
+      status: 'COMPLETED',
+    },
 
-PASS  src/auth/auth.controller.spec.ts
-  AuthController - Endpoint Functionality
-    POST /auth/register - Register Endpoint
-      ✓ should successfully register a new user (21 ms)
-    POST /auth/login - Login Endpoint
-      ✓ should successfully login with valid credentials (2 ms)
-    GET /auth/profile - Profile Endpoint
-      ✓ should return user profile when authenticated (4 ms)
 
-      endpoint yg lain mana?
+</code>
+List of API 
+
+- GET /user/profile: Retrieve user profile
+- PATCH /user/profile: Update user profile
+- POST /accounts: Create bank account (user-specific)
+- GET /accounts: List all user bank accounts
+- GET /accounts/:id: Get specific account
+- PATCH /accounts/:id: Update bank account
+- DELETE /accounts/:id: Delete bank account
+- POST /transactions/withdraw: Withdraw from account
+- GET /transactions: List user transactions
+- GET /transactions/:id: View transaction details See carefully in case we already have some data
+
+<h2> Security </h2>
+
+1. Use jwt secret:
+   <img width="300" height="auto" alt="image" src="https://github.com/user-attachments/assets/2aa9d68a-c13c-457e-9ea8-beed564a4a24" />
+<img width="163" height="81" alt="Screenshot 2025-08-01 at 11 39 30 pm" src="https://github.com/user-attachments/assets/4b349ba7-c39f-4974-bb49-90095d8faeec" />
+
+2. Authentication Guard (JwtAuthGuard):
+- All endpoints have to login
+- No access without JWT token
+
+3. Admin Guard
+- view all users/accounts
+- Delete users/accounts - Admin only
+- operations
+
+Owner Guard (as in ownership)
+
+- View their own profile/accounts
+- can modify their own data
+- Cannot see other users' data
+
+
+<h2> Testing </h2>
+1. src/auth/auth.controller.spec.ts ⇨ check authentication points - register and login
+2. src/auth/auth.error.spec.ts ⇨ error handling (409 conflict errors, 401 unauthorized errors, etc) 
+3. src/transaction/transaction.business.spec.ts ⇨ business logics, type validation, transaction amounts/numbers validation
+4. src/endpoints-test.spec.ts ⇨ chek all endpoints
+
+<h2>Deployment</h2>
+
+- **backend** Railway : milestone-4-tamtaho-syifa-utami.railway.internal
+- **database** Supabase : https://mkasyrrbtmkkmrgnhhwj.supabase.co
