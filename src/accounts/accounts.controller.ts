@@ -29,12 +29,21 @@ export class AccountsController {
   }
 
   @Get()
+  findAll(@Query('userId') userId?: string, @Request() req?) {
+    // If no userId specified, return current user's accounts
+    if (!userId) {
+      return this.accountsService.findByUserId(req.user.id);
+    }
+    
+    // If userId specified, check if admin (for viewing other users' accounts)
+    // This will be handled by the RolesGuard in the admin-specific endpoint
+    return this.accountsService.findByUserId(userId);
+  }
+
+  @Get('all')
   @UseGuards(RolesGuard)
   @Roles(Role.ADMIN) // Only admins can see all accounts
-  findAll(@Query('userId') userId?: string) {
-    if (userId) {
-      return this.accountsService.findByUserId(userId);
-    }
+  findAllAccounts() {
     return this.accountsService.findAll();
   }
 

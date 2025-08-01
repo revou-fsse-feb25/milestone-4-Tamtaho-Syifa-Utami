@@ -63,3 +63,23 @@ export class UsersController {
     return this.usersService.remove(id);
   }
 }
+
+// Add separate User Profile Controller
+@Controller('user')
+@UseGuards(JwtAuthGuard)
+export class UserProfileController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Get('profile')
+  getProfile(@Request() req) {
+    return this.usersService.findOne(req.user.id);
+  }
+
+  @Patch('profile') 
+  updateProfile(
+    @Request() req,
+    @Body(ValidationPipe) updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.update(req.user.id, updateUserDto);
+  }
+}

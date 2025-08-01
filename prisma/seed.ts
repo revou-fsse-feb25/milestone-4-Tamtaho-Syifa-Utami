@@ -3,19 +3,27 @@ import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
+async function safeDelete(modelName: keyof PrismaClient) {
+  try {
+    // @ts-ignore
+    await prisma[modelName].deleteMany();
+  } catch (error) {
+    console.warn(`⚠️  Skipped deleting: Table may not exist yet.`);
+  }
+}
+
 async function main() {
   console.log('🌱 Starting to seed database...');
 
-  // Clear existing data (optional - be careful in production!)
-  await prisma.transaction.deleteMany();
-  await prisma.account.deleteMany();
-  await prisma.user.deleteMany();
+  // Clear existing data safely
+  await safeDelete('transaction');
+  await safeDelete('account');
+  await safeDelete('user');
   console.log('🗑️  Cleared existing data');
 
-  // Hash passwords for users
   const saltRounds = 10;
 
-  // Create Admin Users
+  // Admin Users
   const adminUser = await prisma.user.create({
     data: {
       email: 'admin@bank.com',
@@ -41,7 +49,7 @@ async function main() {
     superAdmin: superAdmin.email 
   });
 
-  // Create Regular Users
+  // Regular Users
   const user1 = await prisma.user.create({
     data: {
       email: 'john.doe@example.com',
@@ -78,7 +86,7 @@ async function main() {
     user3: user3.email 
   });
 
-  // Create Accounts for Regular Users (not admins - they don't need bank accounts)
+  // Accounts
   const account1 = await prisma.account.create({
     data: {
       accountNumber: 'ACC-001-CHK',
@@ -132,10 +140,9 @@ async function main() {
     bobChecking: account5.accountNumber,
   });
 
-  // Create Transactions
+  // Transactions
   const transactions = [];
 
-  // Deposits
   const deposit1 = await prisma.transaction.create({
     data: {
       type: 'DEPOSIT',
@@ -158,7 +165,6 @@ async function main() {
   });
   transactions.push(deposit2);
 
-  // Withdrawals
   const withdrawal1 = await prisma.transaction.create({
     data: {
       type: 'WITHDRAWAL',
@@ -181,14 +187,13 @@ async function main() {
   });
   transactions.push(withdrawal2);
 
-  // Transfers
   const transfer1 = await prisma.transaction.create({
     data: {
       type: 'TRANSFER',
       amount: 500.00,
       description: 'Transfer to savings',
-      fromAccountId: account1.id, // John's checking
-      toAccountId: account2.id,   // John's savings
+      fromAccountId: account1.id,
+      toAccountId: account2.id,
       status: 'COMPLETED',
     },
   });
@@ -199,8 +204,8 @@ async function main() {
       type: 'TRANSFER',
       amount: 300.00,
       description: 'Payment for services',
-      fromAccountId: account3.id, // Jane's checking
-      toAccountId: account5.id,   // Bob's checking
+      fromAccountId: account3.id,
+      toAccountId: account5.id,
       status: 'COMPLETED',
     },
   });
@@ -211,8 +216,8 @@ async function main() {
       type: 'TRANSFER',
       amount: 750.00,
       description: 'Rent payment',
-      fromAccountId: account4.id, // Jane's savings
-      toAccountId: account1.id,   // John's checking
+      fromAccountId: account4.id,
+      toAccountId: account1.id,
       status: 'COMPLETED',
     },
   });
@@ -225,7 +230,7 @@ async function main() {
     total: transactions.length,
   });
 
-  // Display summary
+  // Summary
   console.log('\n📊 Seed Summary:');
   console.log('================');
   

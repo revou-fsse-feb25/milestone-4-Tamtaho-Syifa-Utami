@@ -1,9 +1,11 @@
-import { IsNotEmpty, IsString, IsIn, IsUUID, IsOptional, IsPositive } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsNotEmpty, IsString, IsIn, IsOptional, IsPositive, Min } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 
 export class CreateTransactionDto {
   @Transform(({ value }) => parseFloat(value))
-  @IsPositive()
+  @Type(() => Number)
+  @IsPositive({ message: 'Amount must be positive' })
+  @Min(0.01, { message: 'Amount must be at least 0.01' })
   amount: number;
 
   @IsString()
@@ -15,25 +17,27 @@ export class CreateTransactionDto {
   description?: string;
 
   @IsOptional()
-  @IsUUID()
+  @IsString()
   fromAccountId?: string;
 
   @IsOptional()
-  @IsUUID()
+  @IsString()
   toAccountId?: string;
 }
 
 export class TransferDto {
-  @IsUUID()
+  @IsString()
   @IsNotEmpty()
   fromAccountId: string;
 
-  @IsUUID()
+  @IsString()
   @IsNotEmpty()
   toAccountId: string;
 
   @Transform(({ value }) => parseFloat(value))
-  @IsPositive()
+  @Type(() => Number)
+  @IsPositive({ message: 'Amount must be positive' })
+  @Min(0.01, { message: 'Amount must be at least 0.01' })
   amount: number;
 
   @IsOptional()

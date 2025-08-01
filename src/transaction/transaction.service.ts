@@ -9,6 +9,11 @@ export class TransactionsService {
   async create(createTransactionDto: CreateTransactionDto) {
     const { type, fromAccountId, toAccountId, amount } = createTransactionDto;
 
+    // Validate amount
+    if (amount <= 0) {
+      throw new BadRequestException('Amount must be positive and greater than 0');
+    }
+
     // Validate transaction type requirements
     if (type === 'TRANSFER' && (!fromAccountId || !toAccountId)) {
       throw new BadRequestException('Transfer requires both fromAccountId and toAccountId');
@@ -166,6 +171,11 @@ export class TransactionsService {
   }
 
   async deposit(accountId: string, amount: number, description?: string) {
+    // Validate amount here too
+    if (amount <= 0) {
+      throw new BadRequestException('Amount must be positive and greater than 0');
+    }
+
     return this.create({
       type: 'DEPOSIT',
       amount,
@@ -175,6 +185,11 @@ export class TransactionsService {
   }
 
   async withdraw(accountId: string, amount: number, description?: string) {
+    // Validate amount here too
+    if (amount <= 0) {
+      throw new BadRequestException('Amount must be positive and greater than 0');
+    }
+
     return this.create({
       type: 'WITHDRAWAL',
       amount,

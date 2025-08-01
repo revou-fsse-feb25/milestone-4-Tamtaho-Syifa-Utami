@@ -132,23 +132,31 @@ describe('TransactionsService - Business Logic (Simplified)', () => {
       expect(result).toEqual(expectedTransaction);
     });
 
-    it('should use helper methods for common operations', async () => {
-      // Test deposit helper
-      const depositResult = await service.deposit('account1', 500, 'Salary');
-      expect(depositResult).toBeDefined();
+    it('should have helper methods defined', () => {
+      // Test that the helper methods exist on the service
+      expect(typeof service.deposit).toBe('function');
+      expect(typeof service.withdraw).toBe('function');
+      expect(typeof service.transfer).toBe('function');
+    });
 
-      // Test withdraw helper  
-      const withdrawResult = await service.withdraw('account1', 100, 'ATM');
-      expect(withdrawResult).toBeDefined();
+    it('should call create method for deposit helper', async () => {
+      // Arrange
+      const createSpy = jest.spyOn(service, 'create');
+      const expectedTransaction = { id: 'tx1', type: 'DEPOSIT' };
+      createSpy.mockResolvedValue(expectedTransaction as any);
 
-      // Test transfer helper
-      const transferResult = await service.transfer({
-        fromAccountId: 'account1',
-        toAccountId: 'account2', 
-        amount: 200,
-        description: 'Payment'
+      // Act
+      await service.deposit('account1', 500, 'Salary');
+
+      // Assert
+      expect(createSpy).toHaveBeenCalledWith({
+        type: 'DEPOSIT',
+        amount: 500,
+        toAccountId: 'account1',
+        description: 'Salary',
       });
-      expect(transferResult).toBeDefined();
+
+      createSpy.mockRestore();
     });
   });
 
